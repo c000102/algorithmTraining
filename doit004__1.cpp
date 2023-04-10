@@ -1,3 +1,13 @@
+/*
+in:
+4 2
+GATA
+1 0 0 1
+out:
+2
+*/
+
+
 #include <iostream>
 using namespace std;
 
@@ -6,7 +16,7 @@ int myArr[4];
 int checkSecret =0;
 
 void Add(char c);
-void Remove(chare c);
+void Remove(char c);
 
 int main(void)
 {
@@ -41,4 +51,63 @@ int main(void)
     }
     cout << result << endl;
     return 0;
+}
+
+void Add(char c){
+    switch(c){
+        case 'A':
+            myArr[0]++;
+            if(myArr[0] == checkArr[0]){
+                checkSecret++;
+            }
+            break;
+        case 'C':
+            myArr[1]++;
+            if(myArr[1]==checkArr[1]){
+                checkSecret++;
+            }
+            break;
+        case 'G':
+            myArr[2]++;
+            if(myArr[2]==checkArr[2]){
+                checkSecret++;
+            }
+            break;
+        case 'T':
+            myArr[3]++;
+            if(myArr[3]==checkArr[3]){
+                checkSecret++;
+            }
+            break;
+    }
+}
+
+void Remove(char c){
+    switch (c)
+    {
+    case 'A':
+        if(myArr[0]==checkArr[0]){
+            checkSecret--;
+        }
+        myArr[0]--;
+        break;
+    case 'C':
+        if(myArr[1]==checkArr[1]){
+            checkSecret--;
+        }
+        myArr[1]--;
+        break;
+    case 'G':
+        if(myArr[2]==checkArr[2]){
+            checkSecret--;
+        }
+        myArr[2]--;
+        break;
+    case 'T':
+        if(myArr[3]==checkArr[3]){
+            checkSecret--;
+        }
+        myArr[3]--;
+        break;
+    }
 }
