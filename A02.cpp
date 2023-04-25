@@ -20,6 +20,7 @@ ou:
 */
 
 #include <iostream>
+#include <stdlib.h>
 using namespace std;
 
 #define MAX (100)
@@ -32,6 +33,8 @@ int ey[MAX + 10];
 int sol[MAX * MAX]; //각 영역 넓이 저장용
 
 int paper[MAX+10][MAX+10];
+
+int area = 0;
 
 #if 0
 void InputData()
@@ -46,7 +49,7 @@ void InputData()
 void InputData(){
     M=5, N=7, K=3;
     sx[0] = 0, sy[0] = 2, ex[0] = 4, ey[0] = 4;
-    sx[1] = 1, sy[1] = 1, ex[1] = 2, ey[1] = 3;
+    sx[1] = 1, sy[1] = 1, ex[1] = 2, ey[1] = 5;
     sx[2] = 4, sy[2] = 0, ex[2] = 6, ey[2] = 2;
 }
 #endif
@@ -61,10 +64,29 @@ void OutputData(int ans)
 }
 
 void fillPaper(int sx, int sy, int ex, int ey){
-    for(int y=sy; y<M; y++){
-        for(int x=sx; x<N; x++){
+    for(int y=sy; y<ey; y++){
+        for(int x=sx; x<ex; x++){
             paper[x][y] = 1;
         }
+    }
+}
+
+void floodFill(int x, int y){
+
+    if(x<0||x>=N||y<0||y>=M) return;
+    if (paper[x][y] != 0) return;
+
+    paper[x][y]=2;
+    area++;
+
+    int dx[4] ={0, 0, 1, -1};
+    int dy[4] ={-1, 1, 0, 0};
+
+    for(int i=0; i<4; i++){
+        int nx = x+dx[i];
+        int ny = y+dy[i];
+
+        floodFill(nx, ny);
     }
 }
 
@@ -74,9 +96,20 @@ int solve(void){
     for(int i=0; i<K; i++)
         fillPaper(sx[i], sy[i], ex[i], ey[i]);
 
-    
+    for(int y=0; y<M; y++)
+        for(int x=0; x<N; x++){
+            if(paper[x][y] != 0)continue;
+
+            area = 0;
+            floodFill(x, y);
+            sol[cnt++] = area;
+        }
 
     return cnt;
+}
+
+int comp(const void *a, const void *b){
+    return *(int *)a - *(int *)b;
 }
 
 int main()
@@ -89,6 +122,8 @@ int main()
 
     //여기서부터 작성
     ans = solve();
+
+    qsort(sol, ans, sizeof(sol[0]), comp);
 
     OutputData(ans); //출력하는 부분
     return 0;
