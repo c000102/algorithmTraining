@@ -56,7 +56,7 @@
             }
         },
         {
-            "label": "execute",
+            "label": "run_cpp",
             "command": "${fileDirname}/${fileBasenameNoExtension}",
             "group": "test"
         },

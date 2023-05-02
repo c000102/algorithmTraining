@@ -30,10 +30,13 @@ ou:
 */
 
 #include <stdio.h>
+#include <stdlib.h>
 #define MAXN ((int)1e5)
 int N;
 int X[MAXN + 10];
 int Y[MAXN + 10];
+
+#if 0
 void InputData(void)
 {
     scanf("%d", &N);
@@ -41,6 +44,36 @@ void InputData(void)
     {
         scanf("%d %d", &X[i], &Y[i]);
     }
+}
+#else
+void InputData(void)
+{
+    N = 4;
+    X[1] = 0, Y[1] = 0;
+    X[2] = 8, Y[2] = 3;
+    X[3] = 11, Y[3] = -1;
+    X[4] = 10, Y[4] = 0;
+}
+#endif
+
+int dist(int a, int b){
+    return abs(X[a]-X[b])+abs(Y[a]-Y[b]);
+}
+
+int solve(void){
+    int minDist = (int)(4e8);
+
+    for(int s=2; s<N; s++){
+        int sum =0;
+        for(int i=1; i<N; i++){
+            if(i==s) continue;
+            if(i+1 == s) sum+=dist(i, i+2);
+            else sum += dist(i, i+1);
+        }
+        if(minDist > sum) minDist = sum;
+    }
+    
+    return minDist;
 }
 
 int main(void)
@@ -50,6 +83,7 @@ int main(void)
     InputData(); //입력받는 부분
 
     //여기서부터 작성
+    ans = solve();
 
     printf("%d\n", ans); //출력하는 부분
     return 0;
