@@ -31,9 +31,7 @@ int ex[MAX + 10];
 int ey[MAX + 10];
 
 int sol[MAX * MAX]; //각 영역 넓이 저장용
-
 int paper[MAX+10][MAX+10];
-
 int area = 0;
 
 #if 0
@@ -63,52 +61,69 @@ void OutputData(int ans)
     cout << "\n";
 }
 
-void fillPaper(int sx, int sy, int ex, int ey){
-    for(int y=sy; y<ey; y++){
-        for(int x=sx; x<ex; x++){
-            paper[x][y] = 1;
+void printPaper(void){
+    for (int y = M-1; y >=0; y--)
+    {
+        for (int x = 0; x < N; x++)
+        {
+            int val = paper[y][x];
+            cout << val << " ";
         }
+        cout << endl;
     }
 }
 
-void floodFill(int x, int y){
+void floodFill(int y, int x){
+    if(y<0 || y>=M || x<0 || x>=N) return;
+    if( paper[y][x]!=0) return;
 
-    if(x<0||x>=N||y<0||y>=M) return;
-    if (paper[x][y] != 0) return;
-
-    paper[x][y]=2;
+    paper[y][x] = 2;
     area++;
 
-    int dx[4] ={0, 0, 1, -1};
-    int dy[4] ={-1, 1, 0, 0};
+    int dy[] = {-1, 1, 0, 0};
+    int dx[] = {0, 0, 1, -1};
 
-    for(int i=0; i<4; i++){
-        int nx = x+dx[i];
-        int ny = y+dy[i];
-
-        floodFill(nx, ny);
+    for (int i = 0; i < 4; i++)
+    {
+        int ny = y + dy[i];
+        int nx = x + dx[i];
+        floodFill(ny, nx);
     }
 }
 
 int solve(void){
-    int cnt=0;
+    int cnt =0;
 
-    for(int i=0; i<K; i++)
-        fillPaper(sx[i], sy[i], ex[i], ey[i]);
 
-    for(int y=0; y<M; y++)
-        for(int x=0; x<N; x++){
-            if(paper[x][y] != 0)continue;
+    for(int i=0; i<K; i++){
+        for (int y = sy[i]; y < ey[i]; y++)
+        {
+            for (int x = sx[i]; x < ex[i]; x++)
+            {
+                paper[y][x]= 1;
+            }
+        }
+    }
 
-            area = 0;
-            floodFill(x, y);
+    for (int y = 0; y < M; y++)
+    {
+        for (int x = 0; x < N; x++)
+        {
+            if (paper[y][x] != 0) continue;
+
+            area=0;
+            floodFill(y, x);
             sol[cnt++] = area;
         }
+    }
+
+    printPaper();
 
     return cnt;
 }
 
-int comp(const void *a, const void *b){
+int comp(const void *a, const void *b)
+{
     return *(int *)a - *(int *)b;
 }
 
